@@ -59,6 +59,92 @@ Chalk has no Dock icon. It lives in the menu bar.
   (priority) and `#tags`, anywhere in the text.
 - Press **`⌘H`** in the app for every shortcut.
 
+---
+
+## Features & shortcuts
+
+### Writing a todo
+
+Type a todo and press `Enter`. Any of these can go anywhere in the text:
+
+| Type | What it does |
+| --- | --- |
+| `friday 5pm` | **Deadline.** Shown as a countdown badge, coloured by how soon it is. You're notified based on Settings. |
+| `remind 4pm` | **Reminder.** A notification at that time. |
+| `daily` / `weekly` / `monthly` | **Repeat.** Needs a deadline. When the deadline passes, the todo comes back with the next one. |
+| `p1` `p2` `p3` | **Priority.** Shown as a coloured bar. |
+| `#work` | **Tag,** up to two per todo. `Tab` completes tags you've used before. |
+
+Example: `pay rent friday 5pm remind 9am p1 weekly #home`
+
+While typing, `⌥←` / `⌥→` jump over a command and `⌥⌫` deletes it in one go.
+
+### Shortcuts
+
+| Keys | Action |
+| --- | --- |
+| **Anywhere on your Mac** | |
+| `⌘⇧K` | Open or hide Chalk |
+| `⌘⇧J` | Open Chalk on the scratchpad, or hide it |
+| **Todos** | |
+| `↑` `↓` | Move between todos |
+| `Enter` | Edit |
+| `Space` | Complete |
+| `⌘P` | Pin to the top |
+| `⌘D` | Delete |
+| `⌘Z` | Undo delete |
+| **Moving around** | |
+| `⌥↑` `⌥↓` | Jump between sections |
+| `⌘1`–`⌘4` | Switch view: All / Day / Priority / Tags |
+| `⌘K` | Open or close search |
+| **App** | |
+| `⌘J` | Show or hide the scratchpad |
+| `⌘S` | Open or close settings |
+| `⌘H` | Open or close help |
+| `⌘+` `⌘−` / `⌘0` | Font size up, down / reset |
+| `Esc` | Close whatever's open, then hide Chalk |
+
+### Views
+
+- **All:** one list.
+- **Day:** grouped into Overdue, Today, Tomorrow, This Week, Next Week, Later and No deadline.
+- **Priority:** grouped into Pinned, Overdue, and Priority 1 to 3.
+- **Tags:** grouped by tag.
+
+Completed todos go to the bottom (or a Completed section). Pinned todos stay at the top. With more than one section, a rail on the left lists them for jumping. The view you pick is remembered.
+
+### Notifications
+
+Deadlines and reminders arrive as macOS notifications with buttons:
+
+- **Complete:** marks the todo done.
+- **Remind me in 15 min / 30 min / 1 hour:** only offered if that's still before the deadline.
+- **Extend 15 min / 30 min / 1 hour:** moves the deadline; offered once it has passed.
+- **Clicking the notification:** opens Chalk on that todo.
+
+Several notifications due at once arrive one after another. A todo only ever shows its latest notification: a newer one replaces the older one. Completing a todo clears its reminders.
+
+### Scratchpad
+
+A notepad that slides out on the right (`⌘J`, the notepad icon at the top right, or `⌘⇧J` from anywhere). It saves as you type. `Esc` closes it and puts you back in the new todo field.
+
+### Settings
+
+`⌘S` or the gear icon. Use `↑` `↓` to move, and `Space` or `Enter` to select.
+
+- **Appearance:** System, Light or Dark.
+- **Font size:** 12 to 20px.
+- **View:** the view the list opens on.
+- **Deadline notifications:** at the deadline, a set time before it, both, or none.
+- **Notification sound:** on or off.
+- **Footer:** show or hide the shortcut hints.
+
+### Menu bar
+
+The menu bar icon opens Chalk or quits it, and shows a badge with the number of overdue todos.
+
+---
+
 ## Updating
 
 Download the new `.dmg` and drag Chalk into Applications again, replacing the
