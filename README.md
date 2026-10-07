@@ -50,7 +50,8 @@ flag that triggers the check.
 
 ## Getting started
 
-Chalk has no Dock icon. It lives in the menu bar.
+Chalk lives in the menu bar, with no Dock icon unless you turn on **Show in
+Dock** in Settings.
 
 - **`⌘⇧K`** opens or hides Chalk from anywhere.
 - **`⌘⇧J`** opens it straight to the scratchpad.
@@ -134,10 +135,10 @@ A notepad that slides out on the right (`⌘J`, the notepad icon at the top righ
 
 - **Appearance:** System, Light or Dark.
 - **Font size:** 12 to 20px.
-- **View:** the view the list opens on.
 - **Deadline notifications:** at the deadline, a set time before it, both, or none.
 - **Notification sound:** on or off.
 - **Footer:** show or hide the shortcut hints.
+- **Dock:** show Chalk in the Dock and ⌘Tab, not only the menu bar. Takes effect as soon as it's toggled.
 
 ### Menu bar
 
