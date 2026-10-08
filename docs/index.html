@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>chalk. | a todo list that opens like Spotlight</title>
+  <meta name="description" content="Chalk is a free, keyboard-first todo list for macOS. It lives in your menu bar and opens over whatever you're doing. Type a todo in plain words and get back to work.">
+  <meta property="og:title" content="chalk.">
+  <meta property="og:description" content="A keyboard-first todo list for macOS. Press ⌘⇧K, type it, press Enter, keep going.">
+  <meta property="og:image" content="icon.png">
+  <link rel="icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Appearance before first paint, so there's no flash of the wrong theme.
+    try {
+      const theme = localStorage.getItem("chalk-site-theme");
+      if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
+</head>
+<body>
+
+<!-- The site's navigation is a macOS menu bar. Chalk sits in it, like it does on your Mac. -->
+<header class="menubar" id="menubar">
+  <a class="mb-app" href="#top">Chalk</a>
+  <nav class="mb-menu" aria-label="Sections">
+    <a href="#detour">How it works</a>
+    <a href="#one-line">A week with Chalk</a>
+    <a href="#install">Install</a>
+  </nav>
+  <span class="mb-spacer"></span>
+  <div class="appearance" role="radiogroup" aria-label="Appearance">
+    <button type="button" role="radio" data-theme-choice="system" title="Match system">Auto</button>
+    <button type="button" role="radio" data-theme-choice="light">Light</button>
+    <button type="button" role="radio" data-theme-choice="dark">Dark</button>
+  </div>
+  <button class="tray" id="tray" type="button" aria-label="Show or hide the Chalk panel (⌘⇧K)" title="⌘⇧K">
+    <img src="icon.png" alt="">
+    <span class="tray-badge" id="trayBadge" aria-label="overdue todos"></span>
+  </button>
+  <span class="mb-clock" id="clock"></span>
+  <a class="mb-download" href="https://github.com/cautiously-founded/chalk-releases/releases/latest">Download for Mac</a>
+</header>
+
+<!-- The app's section rail, on the side of the page. -->
+<nav class="rail" id="rail" aria-label="Jump to section"></nav>
+
+<main>
+
+<!-- ───────── Hero: the promise, acted out ───────── -->
+<section class="hero" id="top" data-rail="Today 4:12 PM">
+  <div class="hero-copy">
+    <h1>Write it down.<br><span class="soft">Don't lose your place.</span></h1>
+    <p class="lede">A todo list in your Mac's menu bar. Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd>, type it, press <kbd>↵</kbd>. You're back where you were.</p>
+    <div class="hero-cta">
+      <a class="btn" href="https://github.com/cautiously-founded/chalk-releases/releases/latest">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
+        Download for Mac
+      </a>
+      <button type="button" class="btn-text" id="tryIt">Try it on this page</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <!-- What you were doing: this week's reading, with a chat open beside it. -->
+    <div class="win-browser" aria-hidden="true">
+      <div class="browser-bar">
+        <span class="lights"><i></i><i></i><i></i></span>
+        <span class="url"><svg viewBox="0 0 24 24" width="12" height="12"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>HIST 201 course reader, week 3</span>
+      </div>
+      <div class="reading" id="reading">
+        <article>
+          <p class="reading-kicker">Week 3 reading</p>
+          <h3>Clocks, Bells and the Working Day</h3>
+          <p>Historians of work have long argued that industrialisation changed not only what people did, but how they experienced time. In farming communities the day was organised around tasks, and work stretched or shrank with the season.</p>
+          <p>The early mills had no such flexibility. Machines ran at a fixed pace, and owners needed workers present when they started. Bells, then clocks, then written rules followed.</p>
+          <p><mark class="hi-x" id="readingMark">By the 1830s, some mill owners were fining workers for every few minutes of lateness, and the clock rather than the task had become the measure of a day's work.</mark></p>
+          <p>Schools and railways spread the same habits beyond the factory. By the end of the century punctuality was taught to children as a virtue.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="window">
+      <div class="window-bar">
+        <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="chat-who"><span class="avatar" aria-hidden="true">EW</span><span><b>Emma Walsh</b><small>BIO 210 lab partner</small></span></span>
+        <button type="button" class="replay" id="replay" hidden>Replay</button>
+      </div>
+      <div class="chat" id="chat" aria-live="polite" aria-label="Conversation"></div>
+      <div class="chat-compose" aria-hidden="true"><span id="composeText">Message</span></div>
+    </div>
+
+    <!-- A deadline alert, as macOS shows it. -->
+    <div class="notif hero-notif" id="heroNotif" aria-hidden="true">
+      <img class="notif-icon" src="icon.png" alt="">
+      <div class="notif-body">
+        <p class="notif-top"><b>Chalk</b><span>now</span></p>
+        <p class="notif-title" id="heroNotifTitle"></p>
+        <p class="notif-text" id="heroNotifText"></p>
+      </div>
+    </div>
+
+    <!-- Chalk, floating over it. A live, working copy. -->
+    <div class="panel" id="panel" role="dialog" aria-label="Chalk, live demo">
+      <button type="button" class="panel-close" id="panelClose" aria-label="Hide Chalk" title="Hide (Esc)">×</button>
+      <div class="panel-head">
+        <div class="field-wrap">
+          <div class="field-ghost" id="fieldGhost" aria-hidden="true"></div>
+          <input id="field" class="field" type="text" autocomplete="off" spellcheck="false" placeholder="Add a new todo..." aria-label="Add a new todo">
+        </div>
+        <div class="view-tabs" role="tablist" aria-label="View">
+          <button class="view-tab" role="tab" data-view="all">All</button>
+          <button class="view-tab active" role="tab" data-view="day">Day</button>
+          <button class="view-tab" role="tab" data-view="priority">Priority</button>
+          <button class="view-tab" role="tab" data-view="tags">Tags</button>
+        </div>
+      </div>
+      <div class="list-wrap">
+        <div class="list" id="list" tabindex="0" aria-label="Todos"></div>
+        <div class="list-fade"></div>
+      </div>
+      <div class="cmdbar" aria-hidden="true">
+        <span class="cmd"><b>↵</b>Add</span>
+        <span class="cmd"><b>↑↓</b>Move</span>
+        <span class="cmd"><b>Space</b>Complete</span>
+        <span class="cmd hide-sm"><b>⌘D</b>Delete</span>
+        <span class="cmd"><b>Esc</b>Hide</span>
+      </div>
+    </div>
+
+    <button class="summon" id="summon" type="button">
+      <span class="summon-open">Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd> or click here to open Chalk</span>
+      <span class="summon-close">Press <kbd>Esc</kbd> or click here to hide Chalk</span>
+    </button>
+  </div>
+</section>
+
+<!-- ───────── How fast it is ───────── -->
+<section class="sec" id="detour" data-rail="How it works">
+  <div class="quick">
+    <div class="head">
+      <h2>In and out in <mark class="hi">one line</mark>.</h2>
+      <p>Chalk opens over whatever you're doing, takes what you type, and closes. Your cursor never leaves the page you were on.</p>
+    </div>
+    <ol class="quick-steps">
+      <li><span class="qk"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd></span><span class="qt"><b>Chalk appears</b> on top of the app you're in.</span></li>
+      <li><span class="qk qk-type">pay rent friday 5pm</span><span class="qt"><b>Type it</b> the way you'd say it.</span></li>
+      <li><span class="qk"><kbd>↵</kbd></span><span class="qt"><b>It's saved and gone.</b> You're back mid-sentence.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ───────── A week with Chalk: one scene per slide ───────── -->
+<section class="sec week" id="one-line" data-rail="A week">
+  <div class="week-bar">
+    <div class="week-days" role="tablist" aria-label="Days">
+      <button type="button" class="week-day" role="tab" aria-controls="tuesday" data-slide="0">Tue<span class="week-time"> 9:41 AM</span></button>
+      <button type="button" class="week-day" role="tab" aria-controls="scratchpad" data-slide="1">Wed<span class="week-time"> 2:30 PM</span></button>
+      <button type="button" class="week-day" role="tab" aria-controls="thursday" data-slide="2">Thu<span class="week-time"> 7:00 PM</span></button>
+      <button type="button" class="week-day" role="tab" aria-controls="sunday" data-slide="3">Sun<span class="week-time"> 8:00 PM</span></button>
+    </div>
+    <div class="week-nav">
+      <button type="button" class="week-arrow" data-step="-1" aria-label="Previous day"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="week-arrow" data-step="1" aria-label="Next day"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+  </div>
+
+  <div class="week-track" id="weekTrack" aria-roledescription="carousel" aria-label="A week with Chalk">
+    <!-- Tuesday: say it how you heard it -->
+    <div class="week-slide" id="tuesday" role="tabpanel" aria-roledescription="slide" aria-label="Tuesday, 1 of 4">
+      <div class="split">
+        <div class="head">
+          <p class="stamp">Tuesday, 9:41 AM</p>
+          <h2>Type it the way you <mark class="hi">heard it</mark>.</h2>
+          <p>The lecture's ending and Benjamin mentions the next problem set on the way out. You write it down word for word, and Chalk works out the rest.</p>
+        </div>
+        <div class="anatomy" id="anatomy">
+          <p class="a-field" aria-label="problem set 5 monday 9am remind sunday 8pm p2 #math">problem set 5 <span class="a-cmd hl k-deadline" data-k="deadline">monday 9am</span> <span class="a-cmd hl k-reminder" data-k="reminder">remind sunday 8pm</span> <span class="a-cmd hl k-priority" data-k="priority">p2</span> <span class="a-cmd hl k-tag" data-k="tag">#math</span></p>
+          <p class="a-legend" aria-hidden="true"><span data-k="deadline">deadline</span><span data-k="reminder">reminder</span><span data-k="priority">priority</span><span data-k="tag">tag</span></p>
+          <div class="row-host" id="anatomyRow"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wednesday: the scratchpad -->
+    <div class="week-slide" id="scratchpad" role="tabpanel" aria-roledescription="slide" aria-label="Wednesday, 2 of 4">
+      <div class="pad-split">
+        <div class="head">
+          <p class="stamp">Wednesday, 2:30 PM</p>
+          <h2>Some things aren't <mark class="hi">todos</mark>.</h2>
+          <p>Your landlord is reading out the plumber's number on the phone. There's a notepad beside your list for that, and it saves as you type. Try it.</p>
+        </div>
+        <div class="pad" id="pad">
+          <div class="pad-head"><span>Scratchpad</span><span class="pad-saved" id="padSaved"></span></div>
+          <textarea id="padText" spellcheck="false" aria-label="Scratchpad" placeholder="Jot something down..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thursday: the reminder from the chat arrives -->
+    <div class="week-slide" id="thursday" role="tabpanel" aria-roledescription="slide" aria-label="Thursday, 3 of 4">
+      <div class="split">
+        <div class="head">
+          <p class="stamp">Thursday, 7:00 PM</p>
+          <h2>It reminds you <mark class="hi">before</mark> it's late.</h2>
+          <p>Remember the lab report Emma mentioned? You told Chalk to remind you Thursday night. Dinner's done, and there it is, with a day to spare.</p>
+        </div>
+        <div class="notif-host">
+          <div class="notif">
+            <img class="notif-icon" src="icon.png" alt="">
+            <div class="notif-body">
+              <p class="notif-top"><b>Chalk</b><span>now</span></p>
+              <p class="notif-title">lab report</p>
+              <p class="notif-text">Reminder. Due Fri 5:00pm</p>
+            </div>
+          </div>
+          <div class="notif notif-later" aria-hidden="true">
+            <img class="notif-icon" src="icon.png" alt="">
+            <div class="notif-body">
+              <p class="notif-top"><b>Chalk</b><span>Fri 4:30 PM</span></p>
+              <p class="notif-title">lab report</p>
+              <p class="notif-text">Due in 30 minutes</p>
+            </div>
+          </div>
+          <p class="notif-note">Deadline alerts can come at the deadline, a set time before, or both. You pick in Settings.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sunday: the week ahead, grouped by day -->
+    <div class="week-slide" id="sunday" role="tabpanel" aria-roledescription="slide" aria-label="Sunday, 4 of 4">
+      <div class="split">
+        <div class="head">
+          <p class="stamp">Sunday, 8:00 PM</p>
+          <h2>Next week, <mark class="hi">sorted</mark>.</h2>
+          <p>Tuesday's reminder goes off: problem set 5 is due in the morning. Day view lines the week up for you, and rent has already come back round on its own.</p>
+        </div>
+        <div class="week-panel" id="sundayList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Install ───────── -->
+<section class="sec" id="install" data-rail="Install">
+  <div class="head">
+    <h2>Install it in a <mark class="hi">minute</mark>.</h2>
+    <p>The first time you open Chalk, macOS will ask you to confirm. Here's what to click, and why.</p>
+  </div>
+
+  <div class="install">
+    <ol class="steps">
+      <li><h3>Download the .dmg</h3><p><code>Chalk_&lt;version&gt;_universal.dmg</code> from the <a href="https://github.com/cautiously-founded/chalk-releases/releases/latest">latest release</a>. One file for Apple Silicon and Intel.</p></li>
+      <li><h3>Drag Chalk into Applications</h3><p>Open the .dmg and drag the icon across.</p></li>
+      <li><h3>Open it. macOS will block it.</h3><p>That's expected the first time.</p></li>
+      <li><h3>Click Open Anyway</h3><p><b>System Settings → Privacy &amp; Security</b>. Scroll down to <i>"Chalk" was blocked to protect your Mac</i> and click <b>Open Anyway</b>. You only do this once.</p></li>
+      <li><h3>Allow notifications</h3><p>So deadlines and reminders reach you. Then press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd>.</p></li>
+    </ol>
+
+    <aside class="letter">
+      <p class="letter-head">Why macOS warns you</p>
+      <p>Apple only fully trusts apps from developers who pay $99 a year and send every version to Apple to be checked ("notarized"). I'm a student and can't justify that for a free app, so Chalk isn't notarized.</p>
+      <p>The warning means Apple hasn't checked it. It doesn't mean anything is wrong with it. If I get a developer account, this step goes away.</p>
+      <p class="letter-sign">cautiouslyfound</p>
+      <div class="letter-fix">
+        <p>If macOS says Chalk <b>"is damaged and can't be opened"</b>, run this in Terminal, then open it again:</p>
+        <div class="copyline">
+          <code id="xattrCmd">xattr -cr /Applications/Chalk.app</code>
+          <button type="button" class="copy" data-copy="xattrCmd">Copy</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="close">
+    <p class="close-mark wordmark" aria-hidden="true">chalk.</p>
+    <a class="btn" href="https://github.com/cautiously-founded/chalk-releases/releases/latest">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
+      Download for Mac
+    </a>
+    <p class="hero-note">Version 3.2.0. Made by a student, for students.</p>
+  </div>
+
+  <div class="faq">
+    <details class="all-keys"><summary>Every keyboard shortcut</summary><div class="keys" id="keysTable"></div></details>
+    <details><summary>Where are my todos stored?</summary><p>On your Mac, in a local database. No account, nothing to sign in to. The folder is <code>~/Library/Application Support/com.cautiouslyfound.chalkv3</code>.</p></details>
+    <details><summary>How do I update?</summary><p>Download the new .dmg and drag Chalk into Applications again, replacing the old one. Your todos and settings are kept.</p></details>
+    <details><summary>How do I uninstall?</summary><p>Quit Chalk from its menu bar icon and delete it from Applications. To remove your todos and settings too, delete the folder above.</p></details>
+    <details><summary>Can it show in the Dock?</summary><p>By default it lives only in the menu bar. Turn on <b>Show in Dock</b> in Settings (<kbd>⌘S</kbd>) and it appears in the Dock and <kbd>⌘Tab</kbd> too.</p></details>
+    <details><summary>What can I change in Settings?</summary><p>Appearance (system, light or dark), font size from 12 to 20px, when deadline notifications arrive (at the deadline, a set time before, both, or none), notification sound, and whether the shortcut hints show in the footer.</p></details>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="foot">
+  <p>© 2026 cautiouslyfound. Chalk is free to download and use, but it may not be redistributed or modified.</p>
+  <a href="https://github.com/cautiously-founded/chalk-releases">Releases on GitHub</a>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
