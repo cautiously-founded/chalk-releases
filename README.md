@@ -5,6 +5,8 @@ floating panel over whatever you're doing, like Spotlight.
 
 **[Download the latest version →](../../releases/latest)**
 
+**Website: [cautiously-founded.github.io/chalk-releases](https://cautiously-founded.github.io/chalk-releases/)**
+
 This repository only hosts the downloads. The source code is private.
 
 ---
