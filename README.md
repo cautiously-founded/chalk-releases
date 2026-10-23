@@ -157,9 +157,14 @@ shortcut, then **Check for Updates…** and **Quit**. The icon shows a badge wit
 
 ## Updating
 
-Chalk updates itself: once a day it checks for a new version and asks before
-installing it. You can also check any time with **Check for Updates…** in its
-menu bar menu. Your todos and settings are kept.
+Chalk updates itself: once a day it checks for a new version, and downloads
+and installs it in the background, with nothing to click. It waits until
+Chalk's window is closed. You can also check any time with **Check for
+Updates…** in its menu bar menu. Your todos and settings are kept.
+
+Versions before 4.0.3 ask once before installing; after that, updates are
+automatic. If Chalk was installed by another account on your Mac, macOS asks
+for an administrator's password to update it, and Chalk tells you why first.
 
 If you have Chalk 4.0.0, update by hand this once: quit Chalk, download the
 latest `.dmg` and drag Chalk into Applications, replacing the old one. 4.0.0
