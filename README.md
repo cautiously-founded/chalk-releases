@@ -3,7 +3,7 @@
 A keyboard-first todo list for macOS. It lives in your menu bar and opens as a
 floating panel over whatever you're doing, like Spotlight.
 
-**[Download the latest version →](../../releases/latest)**
+**[Download Chalk.dmg →](../../releases/latest/download/Chalk.dmg)**
 
 **Website: [cautiously-founded.github.io/chalk-releases](https://cautiously-founded.github.io/chalk-releases/)**
 
@@ -13,41 +13,16 @@ This repository only hosts the downloads. The source code is private.
 
 ## Install
 
-1. Download `Chalk_<version>_universal.dmg` from the
-   [latest release](../../releases/latest). It works on both Apple Silicon and
-   Intel Macs, on macOS 15 (Sequoia) or later.
-2. Open the `.dmg` and drag **Chalk** into **Applications**. If you're updating,
-   quit the old Chalk from its menu bar icon first.
-3. Open Chalk from Applications. macOS will block it the first time (see below).
-4. Go to **System Settings → Privacy & Security**, scroll to the bottom, and
-   next to *"Chalk" was blocked to protect your Mac*, click **Open Anyway**.
-   Confirm with your password or Touch ID.
-5. Allow notifications when asked, so deadlines and reminders can reach you.
+1. Download [`Chalk.dmg`](../../releases/latest/download/Chalk.dmg). It works on
+   both Apple Silicon and Intel Macs, on macOS 15 (Sequoia) or later. Every
+   version is on the [releases page](../../releases).
+2. Open the `.dmg` and drag **Chalk** into **Applications**.
+3. Open Chalk from Applications, and allow notifications when asked, so
+   deadlines and reminders can reach you.
 
-You only need to do step 4 once. After that Chalk opens normally.
-
-### Why macOS blocks it
-
-Apple only trusts apps from developers who pay for an Apple Developer account
-($99 a year) and have each version checked by Apple ("notarized"). I'm a
-student and can't justify that cost for a free app, so Chalk isn't notarized,
-and macOS warns you about it.
-
-That warning means Apple hasn't checked the app. It doesn't mean anything is
-wrong with it. If I get a developer account in the future, this step will go
-away.
-
-### If macOS says Chalk "is damaged and can't be opened"
-
-This can happen on some macOS versions with apps that aren't notarized. Open
-**Terminal** and run:
-
-```sh
-xattr -cr /Applications/Chalk.app
-```
-
-Then open Chalk again. The command removes the "downloaded from the internet"
-flag that triggers the check.
+Chalk is signed with a Developer ID and notarized by Apple (from 4.0.4), so
+macOS opens it without a warning. Updates are signed too, and Chalk only
+installs ones that come from me.
 
 ---
 
